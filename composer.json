@@ -1,0 +1,13 @@
+{
+    "name": "g000m/gga-dynamic-placeholder-images",
+    "description": "fork of official repo",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Gabe Herbert",
+            "email": "gh@gabeherbert.com"
+        }
+    ],
+    "require": {}
+}

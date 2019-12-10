@@ -122,12 +122,30 @@ if ( ! class_exists( 'GGA_Dynamic_Placeholder_Images_Core' ) ) {
 
 		private function get_image_id_for_slug( $slug, $width, $height ) {
 			$id = 0;
+			$query = null;
 
-			if ( empty( $slug ) ) {
-				$id = $this->get_existing_image_id_by_dimensions( $width, $height );
-			} else if ( $slug === 'random' ) {
+
+			// @TODO check for 'Is Dynamic Placeholder Image' setting
+			$args = array(
+				'post_type'              => array( 'attachment' ),
+				'post_status'            => array( 'inherit' ),
+				'orderby'                => 'rand',
+				'tax_query'              => array(
+					array(
+						'taxonomy'         => 'media_tag',
+						'terms'            => array( $slug ),
+						'field'            => 'name',
+						'operator'         => 'AND',
+					),
+				),
+			);
+
+
+			if ( $slug === 'random' || empty( $slug )) {
 				$id = $this->get_random_image_id();
 				$this->add_expires = false;
+			} else if ( ($query = new WP_Query( $args ) ) && $query->post_count > 0 ) {
+				$id = $query->posts[0]->ID;
 			} else if ( ! empty( $slug ) ) {
 				$id = $this->get_image_id_by_slug( $slug );
 				if ( empty( $id ) ) {
